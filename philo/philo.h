@@ -6,7 +6,7 @@
 /*   By: fbohling <fbohling@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 11:10:21 by fbohling          #+#    #+#             */
-/*   Updated: 2023/10/17 17:18:15 by fbohling         ###   ########.fr       */
+/*   Updated: 2023/10/18 18:44:24 by fbohling         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ typedef struct s_data
 	int				*arr;
 	int				size;
 	int				dead;
-	int				start;
+	int				finished;
+	int				finished_philos;
 	uint64_t		eating_time;
 	uint64_t		death_time;
 	uint64_t		sleep_time;
@@ -63,7 +64,7 @@ typedef struct s_data
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	printmutex;
 	pthread_mutex_t	lock;
-	pthread_mutex_t	death;
+	pthread_mutex_t	monitor;
 }	t_data;
 
 size_t		substr_numb(char *temp, char c);
@@ -90,11 +91,14 @@ void		*routine(void *philo);
 void		actions(t_philo *p);
 void		take_forks(t_philo *p);
 void		drop_forks(t_philo *p);
-void		*supervisor(void *data);
+void		*check_death(void *data);
 void		init_philos(t_data *data);
 void		display_action(char *action, t_philo *p);
 void		end_sim(t_data *d);
+void		*check_finished(void *data);
+void		check_finished_helper(t_data *d, int i);
 int			ft_atoi_philo(const char *str);
+int			check_death_helper(t_data *d, int i);
 char		*ft_strchr(const char *s, int c);
 char		*ft_strdup(const char *s1);
 char		*ft_strjoin(char const *s1, char const *s2);

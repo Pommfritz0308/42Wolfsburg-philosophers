@@ -6,7 +6,7 @@
 /*   By: fbohling <fbohling@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 10:38:09 by fbohling          #+#    #+#             */
-/*   Updated: 2023/10/18 12:53:26 by fbohling         ###   ########.fr       */
+/*   Updated: 2023/10/18 18:41:04 by fbohling         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,42 +27,14 @@ void	*routine(void *philo)
 	while (1)
 	{
 		display_action(THINK, p);
-		pthread_mutex_lock(&p->data->death);
-		if (p->data->dead)
+		pthread_mutex_lock(&p->data->monitor);
+		if (p->data->finished || p->status)
 		{
-			pthread_mutex_unlock(&p->data->death);
+			pthread_mutex_unlock(&p->data->monitor);
 			return (NULL);
 		}
-		pthread_mutex_unlock(&p->data->death);
+		pthread_mutex_unlock(&p->data->monitor);
 		actions(p);
-	}
-	return (NULL);
-}
-
-void	*supervisor(void *data)
-{
-	t_data			*d;
-	int				i;
-
-	d = (t_data *)data;
-	while (1)
-	{
-		i = -1;
-		while (++i < d->philo_n)
-		{
-			pthread_mutex_lock(&d->death);
-			if (!d->philos[i].eat_stat && (get_time() >= d->philos[i].time_to_die))
-			{
-				// pthread_mutex_lock(&d->printmutex);
-				// printf("%llu, %d\n", d->philos[i].time_to_die - d->philos[i].birth_time, d->philos[i].id);
-				// pthread_mutex_unlock(&d->printmutex);
-				d->dead = 1;
-				pthread_mutex_unlock(&d->death);
-				display_action(DEAD, &d->philos[i]);
-				return (NULL);
-			}
-			pthread_mutex_unlock(&d->death);
-		}
 	}
 	return (NULL);
 }

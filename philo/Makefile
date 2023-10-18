@@ -6,12 +6,12 @@
 #    By: fbohling <fbohling@student.42wolfsburg.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/23 10:36:38 by fbohling          #+#    #+#              #
-#    Updated: 2023/10/12 14:50:09 by fbohling         ###   ########.fr        #
+#    Updated: 2023/10/18 18:51:37 by fbohling         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCS = main.c ft_split.c philo.c utils.c utils2.c std_func.c std_func2.c \
-		std_func3.c actions.c
+SRCS = main.c ft_split.c philo.c inits.c utils.c std_func.c std_func2.c \
+		std_func3.c actions.c monitor.c threads.c input.c
 OBJS = $(SRCS:.c=.o)
 
 BONUS =
