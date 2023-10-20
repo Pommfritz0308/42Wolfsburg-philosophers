@@ -6,7 +6,7 @@
 /*   By: fbohling <fbohling@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 18:36:57 by fbohling          #+#    #+#             */
-/*   Updated: 2023/10/18 18:49:56 by fbohling         ###   ########.fr       */
+/*   Updated: 2023/10/20 15:45:09 by fbohling         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,7 @@ void	init_data(t_data *data)
 	if (data->size == 5)
 		data->meal_n = data->arr[4];
 	pthread_mutex_init(&data->printmutex, NULL);
-	pthread_mutex_init(&data->lock, NULL);
 	pthread_mutex_init(&data->monitor, NULL);
-	pthread_mutex_init(&data->finish, NULL);
 	free(data->arr);
 }
 
@@ -44,7 +42,7 @@ void	init_philos(t_data *d)
 		d->philos[i].data = d;
 		d->philos[i].eat_n = 0;
 		d->philos[i].eat_stat = 0;
-		pthread_mutex_init(&d->philos[i].lock, NULL);
+		d->philos[i].status = 0;
 		i++;
 	}
 }
@@ -61,13 +59,16 @@ void	init_forks(t_data *data)
 	{
 		data->philos[i].left = &(data->forks[i]);
 		data->philos[i].right = &(data->forks[(i + 1) % data->philo_n]);
+		printf("PHILO[%i]: LEFT FORK: %p, RIGHT FORK: %p\n", data->philos[i].id, data->philos[i].left, data->philos[i].right);
 		i++;
 	}
 }
 
 void	clean(t_data *data)
 {
-	free(data->tid);
-	free(data->philos);
-	free(data->forks);
+	if (data->tid)
+		free(data->tid);
+	if (data->philos)
+		free(data->philos);
+	destroy_forks(data);
 }

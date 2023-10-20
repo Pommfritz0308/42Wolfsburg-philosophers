@@ -6,7 +6,7 @@
 /*   By: fbohling <fbohling@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 10:38:09 by fbohling          #+#    #+#             */
-/*   Updated: 2023/10/18 18:41:04 by fbohling         ###   ########.fr       */
+/*   Updated: 2023/10/20 17:13:41 by fbohling         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,10 @@ void	*routine(void *philo)
 	t_philo		*p;
 
 	p = (t_philo *)philo;
+	if (p->id % 2 == 0)
+		ft_usleep(p->data->eating_time / 2);
 	while (1)
 	{
-		display_action(THINK, p);
 		pthread_mutex_lock(&p->data->monitor);
 		if (p->data->finished || p->status)
 		{
@@ -35,6 +36,7 @@ void	*routine(void *philo)
 		}
 		pthread_mutex_unlock(&p->data->monitor);
 		actions(p);
+		display_action(THINK, p);
 	}
 	return (NULL);
 }

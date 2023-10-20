@@ -6,7 +6,7 @@
 /*   By: fbohling <fbohling@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 15:43:13 by fbohling          #+#    #+#             */
-/*   Updated: 2023/10/18 18:51:20 by fbohling         ###   ########.fr       */
+/*   Updated: 2023/10/20 13:33:23 by fbohling         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,19 +42,37 @@ void	ft_usleep(uint64_t duration)
 	start = get_time();
 	while (get_time() - start < duration)
 	{
+		usleep(200);
 	}
 	return ;
 }
 
 void	display_action(char *action, t_philo *p)
 {
-	pthread_mutex_lock(&p->data->monitor);
+	pthread_mutex_lock(&p->data->printmutex);
 	if (!p->data->finished || !ft_strncmp(action, DEAD, ft_strlen(DEAD)))
 	{
-		pthread_mutex_lock(&p->data->printmutex);
-		printf("%llu %i", get_time() - p->birth_time, p->id);
-		printf("%s", action);
-		pthread_mutex_unlock(&p->data->printmutex);
+		ft_putnbr_unsigned(get_time() - p->birth_time);
+		ft_putchar('\t');
+		ft_putnbr(p->id);
+		ft_putchar(' ');
+		color(action);
+		ft_putstr(action);
+		write(1, RESET, ft_strlen(RESET));
 	}
-	pthread_mutex_unlock(&p->data->monitor);
+	pthread_mutex_unlock(&p->data->printmutex);
+}
+
+void	color(char *s)
+{
+	if (!ft_strncmp(s, THINK, ft_strlen(THINK)))
+		write(1, YELLOW, ft_strlen(YELLOW));
+	else if (!ft_strncmp(s, EAT, ft_strlen(EAT)))
+		write(1, GREEN, ft_strlen(GREEN));
+	else if (!ft_strncmp(s, FORK, ft_strlen(FORK)))
+		write(1, MAGENTA, ft_strlen(MAGENTA));
+	else if (!ft_strncmp(s, SLEEP, ft_strlen(SLEEP)))
+		write(1, CYAN, ft_strlen(BLUE));
+	else if (!ft_strncmp(s, DEAD, ft_strlen(DEAD)))
+		write(1, RED, ft_strlen(RED));
 }

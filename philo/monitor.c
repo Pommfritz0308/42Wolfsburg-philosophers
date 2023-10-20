@@ -6,7 +6,7 @@
 /*   By: fbohling <fbohling@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 18:40:23 by fbohling          #+#    #+#             */
-/*   Updated: 2023/10/18 18:44:37 by fbohling         ###   ########.fr       */
+/*   Updated: 2023/10/20 11:40:36 by fbohling         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	*check_finished(void *data)
 	while (1)
 	{
 		pthread_mutex_lock(&d->monitor);
-		if (d->finished_philos == d->philo_n || d->finished)
+		if (!d->meal_n || d->finished_philos == d->philo_n || d->finished)
 		{
 			d->finished = 1;
 			pthread_mutex_unlock(&d->monitor);
@@ -85,4 +85,14 @@ void	check_finished_helper(t_data *d, int i)
 		d->philos[i].status = 1;
 	}
 	pthread_mutex_unlock(&d->monitor);
+}
+
+void	destroy_forks(t_data *data)
+{
+	int	i;
+
+	i = -1;
+	while (++i < data->philo_n)
+		pthread_mutex_destroy(&(data->forks[i]));
+	free(data->forks);
 }

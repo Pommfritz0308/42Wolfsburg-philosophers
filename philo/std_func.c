@@ -6,7 +6,7 @@
 /*   By: fbohling <fbohling@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 14:26:19 by fbohling          #+#    #+#             */
-/*   Updated: 2023/08/25 14:55:06 by fbohling         ###   ########.fr       */
+/*   Updated: 2023/10/20 12:03:55 by fbohling         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,32 +27,9 @@ int	ft_atoi_philo(const char *str)
 		s = -1;
 	if (*str == '-' || *str == '+')
 		str++;
-	conversion(str, &r, &s);
+	if (!conversion(str, &r, &s))
+		return (-1);
 	return ((int)(r * s));
-}
-
-void	conversion(const char *str, int *result, int *sign)
-{
-	int	digit;
-
-	while (*str >= '0' && *str <= '9')
-	{
-		digit = *str - '0';
-		if (*sign == 1 && (*result > INT_MAX / 10
-				|| (*result == INT_MAX / 10 && digit > INT_MAX % 10)))
-		{
-			printf("\033[1;31mEXCEEDING MAX INT\031\n");
-			exit (1);
-		}
-		else if (*sign == -1 && (*result > -(INT_MIN / 10)
-				|| (*result == -(INT_MIN / 10) && digit > -(INT_MIN % 10))))
-		{
-			printf("\033[1;31mEXCEEDING MIN INT\031\n");
-			exit (1);
-		}
-		*result = *result * 10 + digit;
-		str++;
-	}
 }
 
 char	*ft_strchr(const char *s, int c)
@@ -107,4 +84,23 @@ size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
 	}
 	dst[len_dst] = '\0';
 	return (ret);
+}
+
+void	ft_putstr(char *s)
+{
+	size_t	i;
+	int		c;
+
+	if (s == NULL)
+	{
+		write(1, "(null)", 6);
+		return ;
+	}
+	i = 0;
+	while (s[i])
+	{
+		c = (int)s[i];
+		write (1, &c, 1);
+		i++;
+	}
 }
